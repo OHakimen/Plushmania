@@ -6,8 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "AttachToPlayerRendererMixin",
-    "PlayerSkinMixin"
+    "client.AttachToPlayerRendererMixin",
+    "client.PlayerSkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1

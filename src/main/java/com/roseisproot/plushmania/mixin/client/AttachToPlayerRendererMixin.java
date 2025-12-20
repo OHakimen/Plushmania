@@ -1,4 +1,4 @@
-package com.roseisproot.plushmania.mixin;
+package com.roseisproot.plushmania.mixin.client;
 
 import com.roseisproot.plushmania.client.BackItemRenderLayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
