@@ -5,11 +5,15 @@ import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.registry.DataAttachmentRegister;
+import com.roseisproot.plushmania.registry.ItemRegister;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +33,13 @@ public class PlayerSkinMixin {
     private void renderHand(PoseStack poseStack, MultiBufferSource buffer, int combinedLight, AbstractClientPlayer player, ModelPart rendererArm, ModelPart rendererArmwear, CallbackInfo ci, @Local LocalRef<ResourceLocation> location) {
         if(player.getData(DataAttachmentRegister.PLUSHIE.get())) {
             location.set(Plushmania.modLoc("textures/img.png"));
+        }
+    }
+
+    @Inject(at = @At("RETURN"), method = "getArmPose", cancellable = true)
+    private static void getArmPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir){
+        if(player.getItemInHand(hand) instanceof ItemStack stack && stack.is(ItemRegister.SCISSOR_BLADE.get())){
+            cir.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_CHARGE);
         }
     }
 }

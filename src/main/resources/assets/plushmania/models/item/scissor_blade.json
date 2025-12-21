@@ -1,0 +1,35 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:item/handheld",
+	"textures": {
+		"particle": "plushmania:item/scissor_blade",
+		"layer0": "plushmania:item/scissor_blade"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 90, 45],
+			"translation": [0, 7, 1],
+			"scale": [1.7, 1.7, 0.85]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, -90, -45],
+			"translation": [0, 7, 1],
+			"scale": [1.7, 1.7, 0.85]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 90, 25],
+			"translation": [1.13, 5.75, 1.13],
+			"scale": [1.36, 1.36, 0.65]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -90, -25],
+			"translation": [1.13, 5.75, 1.13],
+			"scale": [1.36, 1.36, 0.65]
+		},
+		"ground": {
+			"translation": [0, 4.75, 0],
+			"scale": [1, 1, 0.5]
+		}
+	}
+}

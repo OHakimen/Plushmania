@@ -30,6 +30,7 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
 
 
         Optional<ItemStack> neddleItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.NEEDLE.get())).findFirst();
+        Optional<ItemStack> scissorBlade = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SCISSOR_BLADE.get())).findFirst();
         Optional<ItemStack> spoolOfThreadItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SPOOL_OF_THREAD.get())).findFirst();
 
         if (neddleItem.isPresent()) {
@@ -53,6 +54,38 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
                 poseStack.mulPose(Axis.YP.rotationDegrees((float) d2));
                 Minecraft.getInstance().getItemRenderer()
                         .renderStatic(needle,
+                                ItemDisplayContext.FIXED,
+                                packedLight,
+                                packedLight,
+                                poseStack,
+                                multiBufferSource,
+                                abstractClientPlayer.level(),
+                                0);
+            }
+            poseStack.popPose();
+        }
+
+        if (scissorBlade.isPresent()) {
+            poseStack.pushPose();
+            ItemStack scissor = scissorBlade.get();
+
+            int slots = abstractClientPlayer.getInventory().findSlotMatchingItem(scissor);
+            boolean isHotbar = slots >= 0 && slots <= 8;
+
+            if (!abstractClientPlayer.getItemInHand(InteractionHand.MAIN_HAND).equals(scissor) && isHotbar) {
+                double d0 = Mth.lerp((double) partialTicks, abstractClientPlayer.xCloakO, abstractClientPlayer.xCloak) - Mth.lerp((double) partialTicks, abstractClientPlayer.xo, abstractClientPlayer.getX());
+                double d1 = Mth.lerp((double) partialTicks, abstractClientPlayer.yCloakO, abstractClientPlayer.yCloak) - Mth.lerp((double) partialTicks, abstractClientPlayer.yo, abstractClientPlayer.getY());
+                double d2 = Mth.lerp((double) partialTicks, abstractClientPlayer.zCloakO, abstractClientPlayer.zCloak) - Mth.lerp((double) partialTicks, abstractClientPlayer.zo, abstractClientPlayer.getZ());
+
+
+                poseStack.translate(0.0F, (abstractClientPlayer.isCrouching() ? 0.4 : 0.25), (abstractClientPlayer.isCrouching() ? 0.3 : 0.25));
+                poseStack.scale(1.5f, 1.5f, 1.5f);
+
+                poseStack.mulPose(Axis.XP.rotationDegrees((float) d0 + (abstractClientPlayer.isCrouching() ? 35f : 10)));
+                poseStack.mulPose(Axis.ZP.rotationDegrees((float) d1 + 15));
+                poseStack.mulPose(Axis.YP.rotationDegrees((float) d2));
+                Minecraft.getInstance().getItemRenderer()
+                        .renderStatic(scissor,
                                 ItemDisplayContext.FIXED,
                                 packedLight,
                                 packedLight,
