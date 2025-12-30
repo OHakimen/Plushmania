@@ -2,6 +2,7 @@ package com.roseisproot.plushmania.registry;
 
 import com.mojang.serialization.Codec;
 import com.roseisproot.plushmania.Plushmania;
+import com.roseisproot.plushmania.data.PlushieData;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.bus.api.IEventBus;
@@ -19,19 +20,10 @@ import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.
 public class DataAttachmentRegister {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Plushmania.MODID);
 
-    public static final Supplier<AttachmentType<Boolean>> PLUSHIE = ATTACHMENT_TYPES.register(
-            "plushie", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL.fieldOf("isPlushie").codec())
-                    .sync(new AttachmentSyncHandler<Boolean>() {
-                        @Override
-                        public void write(RegistryFriendlyByteBuf registryFriendlyByteBuf, Boolean aBoolean, boolean initialSync) {
-                            registryFriendlyByteBuf.writeBoolean(aBoolean);
-                        }
-
-                        @Override
-                        public @Nullable Boolean read(IAttachmentHolder iAttachmentHolder, RegistryFriendlyByteBuf registryFriendlyByteBuf, @Nullable Boolean aBoolean) {
-                            return registryFriendlyByteBuf.readBoolean();
-                        }
-                    })
+    public static final Supplier<AttachmentType<PlushieData>> PLUSHIE = ATTACHMENT_TYPES.register(
+            "plushie", () -> AttachmentType.builder(() -> new PlushieData(false,0)).serialize(PlushieData.CODEC)
+                    .sync(PlushieData.STREAM_CODEC)
+                    .copyOnDeath()
                     .build()
     );
 

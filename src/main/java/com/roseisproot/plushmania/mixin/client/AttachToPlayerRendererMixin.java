@@ -1,6 +1,7 @@
 package com.roseisproot.plushmania.mixin.client;
 
-import com.roseisproot.plushmania.client.BackItemRenderLayer;
+import com.roseisproot.plushmania.client.renderers.layers.BackItemRenderLayer;
+import com.roseisproot.plushmania.client.renderers.layers.StitchesLayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +16,9 @@ public class AttachToPlayerRendererMixin {
     public void injectAddLayer(EntityRendererProvider.Context context, boolean useSlimModel, CallbackInfo ci){
         PlayerRenderer renderer = ((PlayerRenderer)(Object)this);
         renderer.addLayer(new BackItemRenderLayer(renderer));
+        renderer.addLayer(new StitchesLayer(renderer,useSlimModel));
     }
+
+
 
 }

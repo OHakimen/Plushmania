@@ -1,4 +1,4 @@
-package com.roseisproot.plushmania.client;
+package com.roseisproot.plushmania.client.renderers.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -9,14 +9,16 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import java.io.File;
 import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
@@ -27,11 +29,24 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, AbstractClientPlayer abstractClientPlayer, float v, float v1, float partialTicks, float v3, float v4, float v5) {
-
-
         Optional<ItemStack> neddleItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.NEEDLE.get())).findFirst();
         Optional<ItemStack> scissorBlade = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SCISSOR_BLADE.get())).findFirst();
-        Optional<ItemStack> spoolOfThreadItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SPOOL_OF_THREAD.get())).findFirst();
+        Optional<ItemStack> spoolOfThreadItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SPOOL_OF_THREAD.get())).filter(stack -> {
+            CustomData stackData = stack.get(DataComponents.CUSTOM_DATA);
+            return stackData != null && stackData.copyTag().contains("Charges") && stackData.copyTag().getInt("Charges") > 0;
+        }).min((o1, o2) -> {
+            CustomData stackData1 = o1.get(DataComponents.CUSTOM_DATA);
+            CustomData stackData2 = o2.get(DataComponents.CUSTOM_DATA);
+
+            if (stackData1 != null && stackData2 != null) {
+                CompoundTag data1 = stackData1.copyTag();
+                CompoundTag data2 = stackData2.copyTag();
+
+                return Integer.compare(data1.getInt("Charges"), data2.getInt("Charges"));
+            }
+
+            return 0;
+        });
 
         if (neddleItem.isPresent()) {
             poseStack.pushPose();

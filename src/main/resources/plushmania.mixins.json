@@ -4,9 +4,12 @@
   "package": "com.roseisproot.plushmania.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PlayerMixin"
   ],
   "client": [
     "client.AttachToPlayerRendererMixin",
+    "client.GuiRendererMixin",
+    "client.HumanoidModelMixin",
     "client.PlayerSkinMixin"
   ],
   "injectors": {

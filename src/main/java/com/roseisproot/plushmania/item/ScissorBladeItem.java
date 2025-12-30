@@ -1,5 +1,8 @@
 package com.roseisproot.plushmania.item;
 
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -7,13 +10,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.SimpleTier;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public class ScissorBladeItem extends TieredItem{
 
@@ -38,7 +41,14 @@ public class ScissorBladeItem extends TieredItem{
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
+
         return super.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T entity, Consumer<Item> onBroken) {
+        entity.level().playSound(null, entity.getOnPos(), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1f,1f);
+        return super.damageItem(stack, amount, entity, onBroken);
     }
 
     @Override
