@@ -1,12 +1,17 @@
 package com.roseisproot.plushmania.client.renderers.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import com.roseisproot.plushmania.Plushmania;
+import com.roseisproot.plushmania.client.models.SlimPlushieModel;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.component.DataComponents;
@@ -19,12 +24,19 @@ import net.minecraft.world.item.component.CustomData;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import java.util.Optional;
+import java.util.*;
+
+import static net.minecraft.client.renderer.entity.LivingEntityRenderer.getOverlayCoords;
 
 @OnlyIn(Dist.CLIENT)
 public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
+
+
+
     public BackItemRenderLayer(RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> renderer) {
         super(renderer);
+
+
     }
 
     @Override
