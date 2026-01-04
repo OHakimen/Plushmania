@@ -1,0 +1,47 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "plushmania:spool_of_thread",
+      "components": {
+        "minecraft:custom_data": {
+          "Charges": 0
+        }
+      }
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "plushmania:spool_of_thread",
+    "components": {
+      "minecraft:custom_data": {
+        "Charges": 64
+      }
+    }
+  }
+}

@@ -1,8 +1,14 @@
 package com.roseisproot.plushmania.item;
 
+import com.haki.rosarium.Rosarium;
+import com.haki.rosarium.common.api.item.IVariantHolder;
+import com.haki.rosarium.extras.SupporterHelper;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.entity.ThrowNeedleEntity;
 import com.roseisproot.plushmania.registry.EntityRegister;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -11,17 +17,17 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.SimpleTier;
 
-public class NeedleItem extends TieredItem {
+import java.util.List;
+
+public class NeedleItem extends TieredItem implements IVariantHolder {
 
     private static final Tier NEEDLE_TIER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 520, 9.0F, 4.0F, 15, Ingredient::of);
 
@@ -50,8 +56,11 @@ public class NeedleItem extends TieredItem {
 
         if(stack.getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("hooking")))) {
             if (!level.isClientSide) {
+
+                stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
                 ThrowNeedleEntity entity = new ThrowNeedleEntity(EntityRegister.THROW_NEEDLE.get(), level);
                 entity.setNeedleOwner(player.getUUID());
+                entity.setItemStack(stack);
                 entity.setPos(player.getEyePosition());
                 entity.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 3, 1);
 
@@ -67,4 +76,45 @@ public class NeedleItem extends TieredItem {
         return super.use(level, player, usedHand);
     }
 
+
+    @Override
+    public int getVariant(ItemStack itemStack){
+        CustomData data = itemStack.get(DataComponents.CUSTOM_DATA);
+        if(data != null){
+            CompoundTag tag = data.copyTag();
+
+            return tag.contains("Variant") ? tag.getInt("Variant") : 0;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public int getMaxVariants(ItemStack itemStack) {
+        return 5;
+    }
+
+    @Override
+    public void setVariant(ItemStack itemStack, int i) {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("Variant", i);
+
+        itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+
+    @Override
+    public List<Component> variantNames(ItemStack itemStack) {
+        return List.of(
+                Component.translatable("item.plushmania.needle"),
+                Component.translatable("item.plushmania.needle.golden"),
+                Component.translatable("item.plushmania.needle.flowering"),
+                Component.translatable("item.plushmania.needle.corrupted"),
+                Component.translatable("item.plushmania.needle.pale")
+        );
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        return variantNames(stack).get(getVariant(stack));
+    }
 }

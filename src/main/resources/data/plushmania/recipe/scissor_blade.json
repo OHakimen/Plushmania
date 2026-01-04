@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " xn",
+    "xn#",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/iron"
+    },
+    "x": {
+      "tag": "c:nuggets/iron"
+    },
+    "n": {
+      "tag": "c:ingots/netherite"
+    }
+  },
+
+  "result": {
+    "count": 1,
+    "id": "plushmania:scissor_blade"
+  }
+}

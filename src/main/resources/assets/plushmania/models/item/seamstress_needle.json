@@ -1,14 +1,22 @@
 {
-	"format_version": "1.21.6",
-	"credit": "Made with Blockbench",
-	"parent": "minecraft:item/generated",
-	"textures": {
-		"layer0": "plushmania:item/seamstress_needle"
-	},
-	"display": {
-		"thirdperson_righthand": {
-			"translation": [0, 3, 1],
-			"scale": [0.55, 0.55, 0.55]
-		}
-	}
+  "format_version": "1.21.6",
+  "credit": "Made with Blockbench",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "plushmania:item/seamstress_needle_chargeless"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "plushmania:state": 0
+      },
+      "model": "plushmania:item/seamstress_needle/seamstress_needle_chargeless"
+    },
+    {
+      "predicate": {
+        "plushmania:state":1
+      },
+      "model": "plushmania:item/seamstress_needle/seamstress_needle"
+    }
+  ]
 }

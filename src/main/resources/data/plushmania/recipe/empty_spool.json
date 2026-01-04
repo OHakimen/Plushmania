@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ppp",
+    " x ",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "tag": "minecraft:planks"
+    },
+    "x": {
+      "tag": "c:fences/wooden"
+    }
+  },
+
+  "result": {
+    "count": 1,
+    "id": "plushmania:spool_of_thread",
+    "components": {
+      "minecraft:custom_data": {
+        "Charges": 0
+      }
+    }
+  }
+}

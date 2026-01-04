@@ -1,5 +1,6 @@
 package com.roseisproot.plushmania.entity;
 
+import com.roseisproot.plushmania.registry.ItemRegister;
 import com.roseisproot.plushmania.registry.ParticleRegister;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -28,6 +30,8 @@ import java.util.UUID;
 public class ThrowNeedleEntity extends ThrowableProjectile {
 
     public static final EntityDataAccessor<Optional<UUID>> OWNER_DATA = SynchedEntityData.defineId(ThrowNeedleEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    public static final EntityDataAccessor<ItemStack> ITEM_STACK = SynchedEntityData.defineId(ThrowNeedleEntity.class, EntityDataSerializers.ITEM_STACK);
+
 
     public ThrowNeedleEntity(EntityType<? extends ThrowableProjectile> entityType, Level level) {
         super(entityType, level);
@@ -50,6 +54,16 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(OWNER_DATA, Optional.empty());
+        builder.define(ITEM_STACK, ItemRegister.NEEDLE.get().getDefaultInstance());
+    }
+
+    public ThrowNeedleEntity setItemStack(ItemStack stack) {
+        this.entityData.set(ITEM_STACK, stack);
+        return this;
+    }
+
+    public ItemStack getItemStack(){
+        return this.entityData.get(ITEM_STACK);
     }
 
     @Override
@@ -116,6 +130,8 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
         }
         super.onHitEntity(result);
     }
+
+
 
     @Override
     protected void onHitBlock(BlockHitResult result) {

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  n",
+    " # ",
+    "#  "
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/iron"
+    },
+    "n": {
+      "tag": "c:ingots/netherite"
+    }
+  },
+
+  "result": {
+    "count": 1,
+    "id": "plushmania:needle"
+  }
+}

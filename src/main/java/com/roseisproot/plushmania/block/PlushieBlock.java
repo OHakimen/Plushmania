@@ -177,6 +177,7 @@ public class PlushieBlock extends Block implements EntityBlock {
             if (!level.isClientSide && plushieBlockEntity.getGameProfile() != null) {
                 CompoundTag tag = plushieBlockEntity.saveWithId(level.registryAccess());
                 tag.putFloat("direction", 0);
+                tag.remove("components");
                 plushStack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(tag));
 
             }

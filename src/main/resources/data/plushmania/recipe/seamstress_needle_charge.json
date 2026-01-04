@@ -1,0 +1,47 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "plushmania:seamstress_needle",
+      "components": {
+        "minecraft:custom_data": {
+          "Charged": 0
+        }
+      }
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    },
+    {
+      "item": "plushmania:living_silk"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "plushmania:seamstress_needle",
+    "components": {
+      "minecraft:custom_data": {
+        "Charged": 1
+      }
+    }
+  }
+}

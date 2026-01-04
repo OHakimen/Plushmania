@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  x",
+    " x ",
+    ".  "
+  ],
+  "key": {
+    "x": {
+      "tag": "c:ingots/iron"
+    },
+    ".": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+
+  "result": {
+    "count": 1,
+    "id": "plushmania:seamstress_needle",
+    "components": {
+      "minecraft:custom_data": {
+        "Charged": 0
+      }
+    }
+  }
+}

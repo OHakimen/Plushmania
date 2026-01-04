@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:dusts/redstone"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    },
+    {
+      "tag": "c:strings"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "id": "plushmania:living_silk"
+  }
+}

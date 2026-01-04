@@ -19,6 +19,4 @@ public class AttachToPlayerRendererMixin {
         renderer.addLayer(new StitchesLayer(renderer,useSlimModel));
     }
 
-
-
 }

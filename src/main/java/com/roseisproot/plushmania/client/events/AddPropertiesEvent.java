@@ -30,5 +30,17 @@ public class AddPropertiesEvent {
             }
             return 0;
         });
+
+        ItemProperties.register(ItemRegister.SEAMSTRESS_NEEDLE.get(), Plushmania.modLoc("state"), (itemStack, clientLevel, livingEntity, i) -> {
+            CustomData data = itemStack.get(DataComponents.CUSTOM_DATA);
+            if(data != null) {
+                CompoundTag tag = data.copyTag();
+
+                if(tag.contains("Charged")){
+                    return tag.getBoolean("Charged") ? 1 : 0;
+                }
+            }
+            return 0;
+        });
     }
 }

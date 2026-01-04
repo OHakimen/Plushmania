@@ -49,7 +49,7 @@ public class ThrowNeedleEntityRenderer extends EntityRenderer<ThrowNeedleEntity>
 
 
         Minecraft.getInstance().getItemRenderer().renderStatic(
-                ItemRegister.NEEDLE.get().getDefaultInstance(),
+                p_entity.getItemStack(),
                 ItemDisplayContext.FIXED,
                 packedLight,
                 0,

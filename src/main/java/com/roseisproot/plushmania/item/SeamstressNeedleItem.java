@@ -45,12 +45,12 @@ public class SeamstressNeedleItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
-        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        /// Maybe add assorted phrases
-        if (data != null) {
-            CompoundTag tag = data.copyTag();
-            tooltipComponents.add(Component.literal(tag.getBoolean("Charged") ? "I would be careful with this needle." : "You weren't careful enough!").withColor(0xff0052));
-        }
+//        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+//        /// Maybe add assorted phrases
+//        if (data != null) {
+//            CompoundTag tag = data.copyTag();
+//            tooltipComponents.add(Component.literal(tag.getBoolean("Charged") ? "I should be careful with this needle." : "You weren't careful enough!").withColor(0xff0052));
+//        }
     }
 
 

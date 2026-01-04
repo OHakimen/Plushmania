@@ -36,7 +36,7 @@ public class SpoolThreadItem extends Item {
         /// Maybe add assorted phrases
         if (data != null) {
             CompoundTag tag = data.copyTag();
-            tooltipComponents.add(Component.literal("Charges: %s/%s".formatted(tag.get("Charges"), MAX_CHARGES)).withColor(0xff0052));
+            tooltipComponents.add(Component.literal("Charges: %s/%s".formatted(tag.getInt("Charges"), MAX_CHARGES)).withColor(0xff0052));
         }
 
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);

@@ -1,0 +1,7 @@
+{
+	"parent": "plushmania:item/needle_variants/needle",
+	"textures": {
+		"layer0": "plushmania:item/needle_variants/pale_needle",
+		"particle": "plushmania:item/needle_variants/pale_needle"
+	}
+}
