@@ -36,14 +36,14 @@ public class PlayerSkinMixin<T extends LivingEntity> {
 
     @Inject(at=@At("RETURN"), method = "getTextureLocation(Lnet/minecraft/client/player/AbstractClientPlayer;)Lnet/minecraft/resources/ResourceLocation;", cancellable = true)
     private void getTextureLocation(AbstractClientPlayer entity, CallbackInfoReturnable<ResourceLocation> cir) {
-        cir.setReturnValue(entity.getData(DataAttachmentRegister.PLUSHIE.get()).isPlushie() ? Plushmania.modLoc("textures/img.png") : cir.getReturnValue());
+//        cir.setReturnValue(entity.getData(DataAttachmentRegister.PLUSHIE.get()).isPlushie() ? Plushmania.modLoc("textures/img.png") : cir.getReturnValue());
     }
 
     @Inject(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/PlayerSkin;texture()Lnet/minecraft/resources/ResourceLocation;", shift = At.Shift.BY, by = 1), method = "renderHand")
     private void renderHand(PoseStack poseStack, MultiBufferSource buffer, int combinedLight, AbstractClientPlayer player, ModelPart rendererArm, ModelPart rendererArmwear, CallbackInfo ci, @Local LocalRef<ResourceLocation> location) {
-        if(player.getData(DataAttachmentRegister.PLUSHIE.get()).isPlushie()) {
-            location.set(Plushmania.modLoc("textures/img.png"));
-        }
+//        if(player.getData(DataAttachmentRegister.PLUSHIE.get()).isPlushie()) {
+//            location.set(Plushmania.modLoc("textures/img.png"));
+//        }
     }
 
     @Inject(at = @At("RETURN"), method = "getArmPose", cancellable = true)

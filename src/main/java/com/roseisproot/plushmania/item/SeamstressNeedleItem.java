@@ -7,8 +7,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -70,36 +74,63 @@ public class SeamstressNeedleItem extends Item {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
 
         PlushieData plushData = player.getData(DataAttachmentRegister.PLUSHIE.get());
-        plushData.setPlushie(data.copyTag().getBoolean("Charged"));
-        plushData.setSogPercentage(0);
-        player.setData(DataAttachmentRegister.PLUSHIE.get(), plushData);
 
-        CompoundTag tag = new CompoundTag();
-        tag.putBoolean("Charged", !data.copyTag().getBoolean("Charged"));
-        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-
-        if (level.isClientSide) {
-            for (int i = 0; i < 32; i++) {
-                level.addParticle(
-                        ParticleRegister.FLOOF.get(), player.getX(), player.getY() + level.getRandom().triangle(1, 1), player.getZ(), level.getRandom().triangle(0, 2),  level.getRandom().triangle(1, 1), level.getRandom().triangle(0, 2)
-                );
-
-                level.addParticle(
-                        ParticleTypes.CLOUD, player.getX(), player.getY() + level.getRandom().triangle(1, 1), player.getZ(), level.getRandom().triangle(0, 0.25),  level.getRandom().triangle(0.1, 0.1), level.getRandom().triangle(0, 0.25)
-                );
-            }
+        if(plushData.isPlushie() && !data.copyTag().getBoolean("Charged")){
+            player.startUsingItem(usedHand);
+            return InteractionResultHolder.success(stack);
+        }else if(!plushData.isPlushie() && data.copyTag().getBoolean("Charged")){
+            player.startUsingItem(usedHand);
+            return InteractionResultHolder.success(stack);
         }
 
-        return InteractionResultHolder.success(stack);
+
+        return InteractionResultHolder.fail(stack);
     }
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 20;
+        return 100;
     }
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
+
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        CompoundTag tag = new CompoundTag();
+
+        if(livingEntity instanceof Player player) {
+            PlushieData plushData = player.getData(DataAttachmentRegister.PLUSHIE.get());
+
+            if(plushData.isPlushie() && !data.copyTag().getBoolean("Charged")){
+                plushData.setPlushie(false);
+                plushData.setSogPercentage(0);
+                tag.putBoolean("Charged", true);
+            }else if(!plushData.isPlushie() && data.copyTag().getBoolean("Charged")){
+                plushData.setPlushie(true);
+                tag.putBoolean("Charged", false);
+            }
+
+            player.setData(DataAttachmentRegister.PLUSHIE.get(), plushData);
+
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+
+            if (level.isClientSide) {
+                for (int i = 0; i < 32; i++) {
+                    level.addParticle(
+                            ParticleRegister.FLOOF.get(), player.getX(), player.getY() + level.getRandom().triangle(1, 1), player.getZ(), level.getRandom().triangle(0, 2),  level.getRandom().triangle(1, 1), level.getRandom().triangle(0, 2)
+                    );
+
+                    level.addParticle(
+                            ParticleTypes.CLOUD, player.getX(), player.getY() + level.getRandom().triangle(1, 1), player.getZ(), level.getRandom().triangle(0, 0.25),  level.getRandom().triangle(0.1, 0.1), level.getRandom().triangle(0, 0.25)
+                    );
+                }
+                level.playSound( player, player.getOnPos(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1f, (float) level.getRandom().triangle(1f,0.21));
+            }
+
+            player.getCooldowns().addCooldown(this, 20);
+        }
+
+
 
         return super.finishUsingItem(stack, level, livingEntity);
     }

@@ -3,8 +3,10 @@ package com.roseisproot.plushmania.client.events;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.client.itemextensions.PlushieClientExtensions;
 import com.roseisproot.plushmania.client.renderers.blockentity.PlushieBlockEntityRenderer;
+import com.roseisproot.plushmania.client.renderers.entity.ThrowNeedleEntityRenderer;
 import com.roseisproot.plushmania.particles.FloofParticle;
 import com.roseisproot.plushmania.registry.BlockEntityRegister;
+import com.roseisproot.plushmania.registry.EntityRegister;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import com.roseisproot.plushmania.registry.ParticleRegister;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,8 @@ public class RegisterRenderersEvent {
     public static void onAddProperties(final EntityRenderersEvent.RegisterRenderers event) {
         Minecraft.getInstance().particleEngine.register(ParticleRegister.FLOOF.get(),
                 FloofParticle.FloofParticleProvider::new);
+
+        event.registerEntityRenderer(EntityRegister.THROW_NEEDLE.get(), ThrowNeedleEntityRenderer::new);
 
         event.registerBlockEntityRenderer(BlockEntityRegister.PLUSH.get(), PlushieBlockEntityRenderer::new);
     }

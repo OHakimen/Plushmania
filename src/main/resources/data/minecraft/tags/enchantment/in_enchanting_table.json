@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "plushmania:guillotine"
+    "plushmania:guillotine",
+    "plushmania:hooking"
   ]
 }

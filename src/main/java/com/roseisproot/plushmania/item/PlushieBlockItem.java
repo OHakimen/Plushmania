@@ -6,6 +6,7 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -65,6 +67,8 @@ public class PlushieBlockItem extends BlockItem {
             }).orTimeout(2, TimeUnit.SECONDS);
         }
     }
+
+
 
     @Override
     public boolean canEquip(ItemStack stack, EquipmentSlot armorType, LivingEntity entity) {

@@ -4,14 +4,22 @@ import com.haki.rosarium.common.utils.ProfileUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.math.Axis;
 import com.roseisproot.plushmania.blockentities.PlushieBlockEntity;
+import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -21,9 +29,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -31,12 +41,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.CommonHooks;
 import org.jetbrains.annotations.Nullable;
 
 import javax.xml.crypto.Data;
@@ -49,6 +62,7 @@ public class PlushieBlock extends Block implements EntityBlock {
                 .noOcclusion()
                 .dynamicShape()
                 .noCollission()
+                .pushReaction(PushReaction.DESTROY)
                 .isSuffocating((blockState, blockGetter, blockPos) -> false));
     }
 
@@ -153,5 +167,26 @@ public class PlushieBlock extends Block implements EntityBlock {
         }
 
         super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        ItemStack plushStack = ItemRegister.PLUSHIE.get().getDefaultInstance();
+        if (blockentity instanceof PlushieBlockEntity plushieBlockEntity) {
+            if (!level.isClientSide && plushieBlockEntity.getGameProfile() != null) {
+                CompoundTag tag = plushieBlockEntity.saveWithId(level.registryAccess());
+                tag.putFloat("direction", 0);
+                plushStack.set(DataComponents.BLOCK_ENTITY_DATA, CustomData.of(tag));
+
+            }
+
+        }
+        if(!player.isCreative() || plushStack.has(DataComponents.BLOCK_ENTITY_DATA)){
+            ItemEntity itementity = new ItemEntity(level, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, plushStack);
+            itementity.setDefaultPickUpDelay();
+            level.addFreshEntity(itementity);
+        }
+        return super.playerWillDestroy(level, pos, state, player);
     }
 }

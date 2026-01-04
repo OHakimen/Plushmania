@@ -6,7 +6,7 @@ public class Registration {
     public static void register(IEventBus bus){
         BlockEntityRegister.register(bus);
 
-
+        EntityRegister.register(bus);
 
         DataAttachmentRegister.register(bus);
         ParticleRegister.register(bus);
