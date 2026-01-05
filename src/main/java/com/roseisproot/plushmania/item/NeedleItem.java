@@ -6,6 +6,7 @@ import com.haki.rosarium.extras.SupporterHelper;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.entity.ThrowNeedleEntity;
 import com.roseisproot.plushmania.registry.EntityRegister;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.SimpleTier;
@@ -45,6 +47,17 @@ public class NeedleItem extends TieredItem implements IVariantHolder {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+
+        if(stack.getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("pogo")))){
+            float dotProduct = (float)attacker.getPosition(0).subtract(target.getPosition(0)).normalize().dot(new Vec3(Direction.UP.step()));
+
+            if(dotProduct >= 0.75){
+                attacker.setDeltaMovement(attacker.getDeltaMovement().multiply(1,0,1).add(0,1,0));
+                attacker.resetFallDistance();
+                attacker.hurtMarked = true;
+            }
+        }
+
         return super.hurtEnemy(stack, target, attacker);
     }
 

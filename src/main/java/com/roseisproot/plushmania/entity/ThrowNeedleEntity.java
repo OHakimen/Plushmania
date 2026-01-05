@@ -1,14 +1,14 @@
 package com.roseisproot.plushmania.entity;
 
+import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.registry.ItemRegister;
-import com.roseisproot.plushmania.registry.ParticleRegister;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +23,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 
-import javax.sound.sampled.Line;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -79,7 +78,6 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
             discard();
         }
 
-        //super.tick();
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (hitresult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, hitresult)) {
             this.hitTargetOrDeflectSelf(hitresult);
@@ -90,7 +88,6 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
         double d0 = this.getX() + vec3.x;
         double d1 = this.getY() + vec3.y;
         double d2 = this.getZ() + vec3.z;
-        //this.updateRotation();
         float f;
         if (this.isInWater()) {
             for(int i = 0; i < 4; ++i) {
@@ -116,14 +113,15 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
                 if (player != null && canHitEntity(result.getEntity())) {
                     Entity  entity = result.getEntity();
                     if(entity instanceof LivingEntity livingEntity){
-                        livingEntity.hurt(serverLevel.damageSources().playerAttack(player), 2f);
+                        livingEntity.hurt(serverLevel.damageSources().playerAttack(player), 0f);
                     }
-                    entity.addDeltaMovement(player.getPosition(0).subtract(result.getEntity().getPosition(0)).normalize().scale(2));
+                    entity.addDeltaMovement(player.getPosition(0).subtract(result.getEntity().getPosition(0)).normalize().scale(1));
                     entity.hurtMarked = true;
                     serverLevel.sendParticles(
                             ParticleTypes.DAMAGE_INDICATOR, entity.getX() + serverLevel.random.triangle(0,0.25), entity.getY() + 1, entity.getZ() + serverLevel.random.triangle(0,0.25),
                             1, 0.5, 0.5, 0.5, 0.05
                     );
+                    this.playSound(SoundEvents.TRIDENT_HIT, 1f, (float) serverLevel.random.triangle(1,0.2f));
                 }
                 this.discard();
             }
@@ -139,9 +137,28 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
             if(getNeedleOwner() != null){
                 UUID uuid = getNeedleOwner();
                 Player player = serverLevel.getPlayerByUUID(uuid);
-                if (player != null ) {
-                    player.addDeltaMovement(result.getBlockPos().getBottomCenter().subtract(player.getPosition(0)).normalize().scale(2));
+
+                boolean pogoed = false;
+
+                if (player != null) {
+
+                    if(getItemStack().getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("pogo")))){
+                        Vec3 normal = new Vec3(result.getDirection().step());
+                        float dot = (float) this.getViewVector(0).normalize().dot(normal);
+
+                        if(result.getDirection() == Direction.UP && dot > 0.95) {
+                            pogoed = true;
+                            player.resetFallDistance();
+                            player.addDeltaMovement(new Vec3(0, 1, 0));
+                        }
+                    }
+
+                    if(!pogoed){
+                        player.addDeltaMovement(result.getBlockPos().getCenter().subtract(player.getPosition(0)).normalize().scale(1.5));
+                    }
+
                     player.hurtMarked = true;
+                    this.playSound(SoundEvents.TRIDENT_HIT_GROUND, 1f, (float) serverLevel.random.triangle(1,0.2f));
                 }
             }
         }
