@@ -6,6 +6,7 @@ import com.haki.rosarium.extras.SupporterHelper;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.entity.ThrowNeedleEntity;
 import com.roseisproot.plushmania.registry.EntityRegister;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -22,16 +23,19 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.SimpleTier;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.internal.NeoForgeItemTagsProvider;
 
 import java.util.List;
 
 public class NeedleItem extends TieredItem implements IVariantHolder {
 
-    private static final Tier NEEDLE_TIER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 520, 9.0F, 4.0F, 15, Ingredient::of);
+    private static final Tier NEEDLE_TIER = new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 520, 9.0F, 4.0F, 15, () -> Ingredient.of(Tags.Items.INGOTS_IRON));
 
     public NeedleItem() {
         super(NEEDLE_TIER, new Properties()
@@ -44,6 +48,10 @@ public class NeedleItem extends TieredItem implements IVariantHolder {
         return ItemAbilities.DEFAULT_SWORD_ACTIONS.contains(itemAbility);
     }
 
+    @Override
+    public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {

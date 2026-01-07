@@ -60,6 +60,9 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
             return 0;
         });
 
+        boolean didRenderNeedle = false;
+
+
         if (neddleItem.isPresent()) {
             poseStack.pushPose();
             ItemStack needle = neddleItem.get();
@@ -88,6 +91,7 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
                                 multiBufferSource,
                                 abstractClientPlayer.level(),
                                 0);
+                didRenderNeedle = true;
             }
             poseStack.popPose();
         }
@@ -105,7 +109,11 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
                 double d2 = Mth.lerp((double) partialTicks, abstractClientPlayer.zCloakO, abstractClientPlayer.zCloak) - Mth.lerp((double) partialTicks, abstractClientPlayer.zo, abstractClientPlayer.getZ());
 
 
-                poseStack.translate(0.0F, (abstractClientPlayer.isCrouching() ? 0.4 : 0.25), (abstractClientPlayer.isCrouching() ? 0.3 : 0.25));
+                if(didRenderNeedle){
+                    poseStack.translate(0.0F, (abstractClientPlayer.isCrouching() ? 0.4 : 0.25), (abstractClientPlayer.isCrouching() ? 0.3 : 0.25));
+                }else{
+                    poseStack.translate(0.0F, (abstractClientPlayer.isCrouching() ? 0.4 : 0.25), (abstractClientPlayer.isCrouching() ? 0.3 : 0.15));
+                }
                 poseStack.scale(1.5f, 1.5f, 1.5f);
 
                 poseStack.mulPose(Axis.XP.rotationDegrees((float) d0 + (abstractClientPlayer.isCrouching() ? 35f : 10)));

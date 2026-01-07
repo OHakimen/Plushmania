@@ -3,6 +3,8 @@ package com.roseisproot.plushmania.entity;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,6 +24,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
+import org.joml.Vector3f;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -88,20 +91,18 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
         double d0 = this.getX() + vec3.x;
         double d1 = this.getY() + vec3.y;
         double d2 = this.getZ() + vec3.z;
-        float f;
+        float f = 0.99F;
+
         if (this.isInWater()) {
             for(int i = 0; i < 4; ++i) {
                 this.level().addParticle(ParticleTypes.BUBBLE, d0 - vec3.x * 0.25, d1 - vec3.y * 0.25, d2 - vec3.z * 0.25, vec3.x, vec3.y, vec3.z);
             }
-
-            f = 0.8F;
-        } else {
-            f = 0.99F;
         }
 
         this.setDeltaMovement(vec3.scale((double)f));
         this.applyGravity();
         this.setPos(d0, d1, d2);
+        this.baseTick();
     }
 
     @Override
@@ -146,18 +147,25 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
                         Vec3 normal = new Vec3(result.getDirection().step());
                         float dot = (float) this.getViewVector(0).normalize().dot(normal);
 
-                        if(result.getDirection() == Direction.UP && dot > 0.95) {
+                        if(result.getDirection() == Direction.UP && dot > 0.95 && tickCount <= 10) {
                             pogoed = true;
+                            player.setDeltaMovement(player.getDeltaMovement().multiply(1,0,1).add(new Vec3(0, 1, 0)));
                             player.resetFallDistance();
-                            player.addDeltaMovement(new Vec3(0, 1, 0));
                         }
                     }
 
                     if(!pogoed){
                         player.addDeltaMovement(result.getBlockPos().getCenter().subtract(player.getPosition(0)).normalize().scale(1.5));
+                        player.resetFallDistance();
                     }
 
                     player.hurtMarked = true;
+
+                    Vec3 normal = new Vec3(result.getDirection().step());
+                    Vec3 pos = (result.getLocation()).add(normal.scale(0.01f));
+
+                    serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK,
+                            serverLevel.getBlockState(result.getBlockPos())), pos.x, pos.y, pos.z, 32, 0,0,0,0);
                     this.playSound(SoundEvents.TRIDENT_HIT_GROUND, 1f, (float) serverLevel.random.triangle(1,0.2f));
                 }
             }

@@ -48,7 +48,7 @@ public class PlayerSkinMixin<T extends LivingEntity> {
 
     @Inject(at = @At("RETURN"), method = "getArmPose", cancellable = true)
     private static void getArmPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> cir){
-        if(player.getItemInHand(hand) instanceof ItemStack stack && stack.is(ItemRegister.SCISSOR_BLADE.get())){
+        if(player.getItemInHand(hand) instanceof ItemStack stack && stack.is(ItemRegister.SCISSOR_BLADE.get()) && player.getUseItem() != stack){
             cir.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_CHARGE);
         }
     }

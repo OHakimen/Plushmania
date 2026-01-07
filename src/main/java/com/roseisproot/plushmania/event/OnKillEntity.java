@@ -35,7 +35,8 @@ public class OnKillEntity {
 
         if(user != null && user.level() instanceof ServerLevel level && user.getWeaponItem() instanceof ItemStack weapon && weapon.is(GUILLOTINE)
            && weapon.getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("guillotine")))
-           && level.getRandom().nextFloat() <= 0.05f ){
+           // TODO: Make this a config (0.05f)
+           && level.getRandom().nextFloat() <= 0.05f){
             LivingEntity killed = event.getEntity();
 
             ItemStack toDrop = ItemStack.EMPTY;

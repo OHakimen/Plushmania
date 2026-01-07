@@ -1,0 +1,7 @@
+{
+	"parent": "plushmania:item/scissor_blade_variants/scissor_blade",
+	"textures": {
+		"layer0": "plushmania:item/scissor_blade_variants/flowering_scissor_blade",
+		"particle": "plushmania:item/scissor_blade_variants/flowering_scissor_blade"
+	}
+}

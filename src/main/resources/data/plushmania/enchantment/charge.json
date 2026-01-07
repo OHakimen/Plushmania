@@ -1,0 +1,23 @@
+{
+  "anvil_cost": 8,
+  "description": {
+    "translate": "enchantment.plushmania.charge"
+  },
+  "effects": {
+  },
+  "max_cost": {
+    "base": 45,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 21,
+    "per_level_above_first": 0
+  },
+  "primary_items": "#plushmania:enchantable/charge",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#plushmania:enchantable/charge",
+  "weight": 20
+}
