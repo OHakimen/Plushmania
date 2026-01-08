@@ -3,6 +3,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:item/generated",
 	"textures": {
-		"layer0": "plushmania:item/seamstress_needle"
+		"layer0": "plushmania:item/seamstress_needle_base",
+		"layer1": "plushmania:item/seamstress_needle"
 	}
 }

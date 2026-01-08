@@ -7,10 +7,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 @EventBusSubscriber(modid = Plushmania.MODID, value = Dist.CLIENT)
 public class AddPropertiesEvent {
@@ -42,5 +44,25 @@ public class AddPropertiesEvent {
             }
             return 0;
         });
+    }
+
+    @SubscribeEvent
+    public static void registerColors(RegisterColorHandlersEvent.Item event) {
+        event.register((itemStack, i) -> {
+
+            DyedItemColor color = itemStack.get(DataComponents.DYED_COLOR);
+
+            if(i == 1){
+                int rgb = 0xff0052;
+                if(color != null){
+                    rgb = color.rgb();
+                }
+
+
+                return rgb | 0xff000000;
+            }
+
+            return 0xffffffff;
+        }, ItemRegister.SEAMSTRESS_NEEDLE::get);
     }
 }

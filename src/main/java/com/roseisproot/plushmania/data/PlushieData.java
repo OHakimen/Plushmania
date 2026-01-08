@@ -9,17 +9,20 @@ public class PlushieData{
 
     boolean isPlushie;
     float sogPercentage;
+    int color;
 
 
-    public PlushieData(boolean isPlushie, float sogPercentage) {
+    public PlushieData(boolean isPlushie, float sogPercentage, int color) {
         this.isPlushie = isPlushie;
         this.sogPercentage = sogPercentage;
+        this.color = color;
     }
 
     public static Codec<PlushieData> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codec.BOOL.fieldOf("isPlushie").forGetter(PlushieData::isPlushie),
-                    Codec.FLOAT.fieldOf("sogPercentage").forGetter(PlushieData::sogPercentage)
+                    Codec.FLOAT.fieldOf("sogPercentage").forGetter(PlushieData::sogPercentage),
+                    Codec.INT.fieldOf("color").forGetter(PlushieData::getColor)
             ).apply(instance, PlushieData::new)
     );
 
@@ -29,14 +32,16 @@ public class PlushieData{
 
             boolean isPlushie = registryFriendlyByteBuf.readBoolean();
             float sogPercentage = registryFriendlyByteBuf.readFloat();
+            int color = registryFriendlyByteBuf.readInt();
 
-            return new PlushieData(isPlushie, sogPercentage);
+            return new PlushieData(isPlushie, sogPercentage, color);
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf o, PlushieData plushieData) {
             o.writeBoolean(plushieData.isPlushie());
             o.writeFloat(plushieData.sogPercentage());
+            o.writeInt(plushieData.getColor());
         }
     };
 
@@ -55,6 +60,15 @@ public class PlushieData{
 
     public PlushieData setSogPercentage(float sogPercentage) {
         this.sogPercentage = sogPercentage;
+        return this;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public PlushieData setColor(int color) {
+        this.color = color;
         return this;
     }
 }

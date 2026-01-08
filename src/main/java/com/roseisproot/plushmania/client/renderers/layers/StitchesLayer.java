@@ -45,7 +45,7 @@ public class StitchesLayer extends RenderLayer<AbstractClientPlayer, PlayerModel
             VertexConsumer consumer = multiBufferSource.getBuffer(RenderType.entityTranslucent(seamTexture,false));
 
             int i = getOverlayCoords(abstractClientPlayer, 0);
-            model.renderToBuffer(poseStack, consumer, packedLight, i, (0xff0052 & color)  | 0xff000000);
+            model.renderToBuffer(poseStack, consumer, packedLight, i, (data.getColor() & color)  | 0xff000000);
         }
     }
 }

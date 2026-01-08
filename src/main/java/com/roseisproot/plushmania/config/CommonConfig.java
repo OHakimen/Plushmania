@@ -15,7 +15,7 @@ public class CommonConfig {
 
     public static final ModConfigSpec.DoubleValue SOGGINESS_THRESHOLD = BUILDER
             .comment("The percentage of sog to be actually considered 'soggy'")
-            .defineInRange("sogginess_threshold", 0.05, 0, 1);
+            .defineInRange("sogginess_threshold", 0.25, 0, 1);
 
     public static final ModConfigSpec.IntValue TICKS_BETWEEN_HEALING_FROM_SPOOL_OF_THREAD = BUILDER
             .comment("The amount of time (in ticks) for a charge of a spool be consumed as a healing")

@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -20,13 +19,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Random;
 
-public class SeamstressNeedleItem extends Item {
+public class SeamstressNeedleItem extends Item{
 
     static CompoundTag DEFAULT = new CompoundTag();
 
@@ -105,9 +104,19 @@ public class SeamstressNeedleItem extends Item {
                 plushData.setPlushie(false);
                 plushData.setSogPercentage(0);
                 tag.putBoolean("Charged", true);
+
+                stack.set(DataComponents.DYED_COLOR, new DyedItemColor(plushData.getColor(), true));
+
             }else if(!plushData.isPlushie() && data.copyTag().getBoolean("Charged")){
+
+                DyedItemColor color = stack.get(DataComponents.DYED_COLOR);
+
                 plushData.setPlushie(true);
+                plushData.setColor(color != null ? color.rgb() : 0xff0052);
+
                 tag.putBoolean("Charged", false);
+
+                stack.remove(DataComponents.DYED_COLOR);
             }
 
             player.setData(DataAttachmentRegister.PLUSHIE.get(), plushData);
