@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -57,16 +58,44 @@ public class NeedleItem extends TieredItem implements IVariantHolder {
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 
         if(stack.getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("pogo")))){
+
             float dotProduct = (float)attacker.getPosition(0).subtract(target.getPosition(0)).normalize().dot(new Vec3(Direction.UP.step()));
 
             if(dotProduct >= 0.75){
+                CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+                CompoundTag tag = new CompoundTag();
+                if(data != null) {
+                    tag = data.copyTag();
+                }
+
                 attacker.setDeltaMovement(attacker.getDeltaMovement().multiply(1,0,1).add(0,1,0));
                 attacker.resetFallDistance();
                 attacker.hurtMarked = true;
+
+                tag.putBoolean("Pogo", true);
+
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
             }
         }
 
         return super.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if(isSelected && entity.onGround()){
+            CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+            CompoundTag tag;
+            if(data != null) {
+                tag = data.copyTag();
+
+                if(tag.contains("Pogo")) {
+                    tag.putBoolean("Pogo", false);
+                }
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+            }
+        }
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
     @Override
@@ -117,7 +146,13 @@ public class NeedleItem extends TieredItem implements IVariantHolder {
 
     @Override
     public void setVariant(ItemStack itemStack, int i) {
+        CustomData data = itemStack.get(DataComponents.CUSTOM_DATA);
+
         CompoundTag tag = new CompoundTag();
+        if(data != null && !data.copyTag().isEmpty()){
+            tag = data.copyTag();
+
+        }
         tag.putInt("Variant", i);
 
         itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));

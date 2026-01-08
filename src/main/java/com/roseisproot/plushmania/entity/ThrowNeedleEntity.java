@@ -3,9 +3,11 @@ package com.roseisproot.plushmania.entity;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -151,6 +154,16 @@ public class ThrowNeedleEntity extends ThrowableProjectile {
                             pogoed = true;
                             player.setDeltaMovement(player.getDeltaMovement().multiply(1,0,1).add(new Vec3(0, 1, 0)));
                             player.resetFallDistance();
+
+                            CustomData data = getItemStack().get(DataComponents.CUSTOM_DATA);
+                            CompoundTag tag = new CompoundTag();
+                            if(data != null) {
+                                tag = data.copyTag();
+                            }
+
+                            tag.putBoolean("Pogo", true);
+
+                            getItemStack().set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
                         }
                     }
 

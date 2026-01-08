@@ -4,6 +4,7 @@
   "package": "com.roseisproot.plushmania.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "LivingEntityMixin",
     "PlayerMixin"
   ],
   "client": [

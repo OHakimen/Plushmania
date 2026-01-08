@@ -104,10 +104,12 @@ public class ScissorBladeItem extends TieredItem implements IVariantHolder {
 
             List<LivingEntity> entities = level.getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat(), livingEntity,
                     AABB.ofSize(livingEntity.getPosition(0),2,2,2)
-                            .expandTowards(direction.multiply(1,0,1).scale(livingEntity.onGround() ? 3: 1.5f)));
+                            .expandTowards(direction.multiply(1,0,1).scale(3)));
 
             for (LivingEntity entity : entities) {
                 entity.hurt(level.damageSources().mobAttack(livingEntity), (float) (livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 3));
+                entity.addDeltaMovement(direction.multiply(1,0,1));
+                entity.hurtMarked = true;
             }
 
             if(livingEntity instanceof Player player) {
