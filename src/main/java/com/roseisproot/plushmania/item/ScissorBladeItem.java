@@ -112,6 +112,8 @@ public class ScissorBladeItem extends TieredItem implements IVariantHolder {
                 entity.hurtMarked = true;
             }
 
+            stack.hurtAndBreak(1, livingEntity, EquipmentSlot.MAINHAND);
+
             if(livingEntity instanceof Player player) {
                 player.getCooldowns().addCooldown(this, 100);
             }

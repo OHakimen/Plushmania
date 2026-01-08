@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.client.models.SlimPlushieModel;
+import com.roseisproot.plushmania.config.ClientConfig;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -41,6 +42,11 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, AbstractClientPlayer abstractClientPlayer, float v, float v1, float partialTicks, float v3, float v4, float v5) {
+
+        if(ClientConfig.DISABLE_BACK_ITEM_DISPLAY.get()){
+            return;
+        }
+
         Optional<ItemStack> neddleItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.NEEDLE.get())).findFirst();
         Optional<ItemStack> scissorBlade = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SCISSOR_BLADE.get())).findFirst();
         Optional<ItemStack> spoolOfThreadItem = abstractClientPlayer.getInventory().items.stream().filter((e) -> e.is(ItemRegister.SPOOL_OF_THREAD.get())).filter(stack -> {

@@ -1,6 +1,7 @@
 package com.roseisproot.plushmania.event;
 
 import com.roseisproot.plushmania.Plushmania;
+import com.roseisproot.plushmania.config.CommonConfig;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,12 +33,12 @@ public class OnKillEntity {
     @SubscribeEvent
     public static void onKillEntity(LivingDeathEvent event) {
         Entity user = event.getSource().getEntity();
-
+        LivingEntity killed = event.getEntity();
         if(user != null && user.level() instanceof ServerLevel level && user.getWeaponItem() instanceof ItemStack weapon && weapon.is(GUILLOTINE)
            && weapon.getTagEnchantments().keySet().stream().anyMatch(enchantmentHolder -> enchantmentHolder.is(Plushmania.modLoc("guillotine")))
-           // TODO: Make this a config (0.05f)
-           && level.getRandom().nextFloat() <= 0.05f){
-            LivingEntity killed = event.getEntity();
+           && level.getRandom().nextFloat() <= CommonConfig.GUILLOTINE_BEHEADING_CHANCE.getAsDouble()
+           && !CommonConfig.BANNED_MOBS_FOR_GUILLOTINE.get().contains(BuiltInRegistries.ENTITY_TYPE.getKey(killed.getType()).toString())){
+
 
             ItemStack toDrop = ItemStack.EMPTY;
             switch (killed.getClass().getSimpleName()){

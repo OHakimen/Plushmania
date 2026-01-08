@@ -2,11 +2,14 @@ package com.roseisproot.plushmania;
 
 
 import com.mojang.logging.LogUtils;
+import com.roseisproot.plushmania.config.ClientConfig;
+import com.roseisproot.plushmania.config.CommonConfig;
 import com.roseisproot.plushmania.registry.Registration;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 
 
@@ -24,6 +27,9 @@ public class Plushmania {
     }
 
     public Plushmania(IEventBus modEventBus, ModContainer modContainer) {
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+
         Registration.register(modEventBus);
     }
 }

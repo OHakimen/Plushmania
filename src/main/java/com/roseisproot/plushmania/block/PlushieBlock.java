@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.BreakingItemParticle;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -70,6 +72,8 @@ public class PlushieBlock extends Block implements EntityBlock {
     public VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.empty();
     }
+
+
 
     @Override
     public boolean propagatesSkylightDown(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
@@ -170,7 +174,7 @@ public class PlushieBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         BlockEntity blockentity = level.getBlockEntity(pos);
         ItemStack plushStack = ItemRegister.PLUSHIE.get().getDefaultInstance();
         if (blockentity instanceof PlushieBlockEntity plushieBlockEntity) {
@@ -183,11 +187,9 @@ public class PlushieBlock extends Block implements EntityBlock {
             }
 
         }
-        if(!player.isCreative() || plushStack.has(DataComponents.BLOCK_ENTITY_DATA)){
-            ItemEntity itementity = new ItemEntity(level, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, plushStack);
-            itementity.setDefaultPickUpDelay();
-            level.addFreshEntity(itementity);
-        }
-        return super.playerWillDestroy(level, pos, state, player);
+        ItemEntity itementity = new ItemEntity(level, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, plushStack);
+        itementity.setDefaultPickUpDelay();
+        level.addFreshEntity(itementity);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

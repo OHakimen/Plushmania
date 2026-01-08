@@ -1,5 +1,6 @@
 package com.roseisproot.plushmania.mixin;
 
+import com.roseisproot.plushmania.config.CommonConfig;
 import com.roseisproot.plushmania.data.PlushieData;
 import com.roseisproot.plushmania.registry.DataAttachmentRegister;
 import com.roseisproot.plushmania.registry.ItemRegister;
@@ -41,7 +42,7 @@ public abstract class PlayerMixin {
 
         PlushieData data = entity.getData(DataAttachmentRegister.PLUSHIE.get());
 
-        if (entity.level() instanceof ServerLevel level && source.getEntity() != null && data.isPlushie()) {
+        if (entity.level() instanceof ServerLevel level && source.getEntity() != null && data.isPlushie() && cir.getReturnValue()) {
             level.sendParticles(
                     ParticleRegister.FLOOF.get(), entity.getX() + level.random.triangle(0,0.25), entity.getY() + 1, entity.getZ() + level.random.triangle(0,0.25),
                     64, 0.5, 0.5, 0.5, 0.05
@@ -58,7 +59,7 @@ public abstract class PlayerMixin {
 
         if (data.isPlushie()) {
 
-            if (entity.getInventory().hasAnyMatching(stack -> stack.getItem().equals(ItemRegister.SPOOL_OF_THREAD.get())) && entity.tickCount % 40 == 0) {
+            if (entity.getInventory().hasAnyMatching(stack -> stack.getItem().equals(ItemRegister.SPOOL_OF_THREAD.get())) && entity.tickCount % CommonConfig.TICKS_BETWEEN_HEALING_FROM_SPOOL_OF_THREAD.get() == 0) {
 
                 List<ItemStack> items  = new ArrayList<>();
 
@@ -113,7 +114,7 @@ public abstract class PlayerMixin {
             }
 
 
-            if (entity.level() instanceof ServerLevel level && data.sogPercentage() > 0.25) {
+            if (entity.level() instanceof ServerLevel level && data.sogPercentage() > CommonConfig.SOGGINESS_THRESHOLD.getAsDouble()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 0, false, false));
                 level.sendParticles(
                         ParticleTypes.FALLING_WATER, entity.getRandomX(1), entity.getRandomY(), entity.getRandomZ(1),
@@ -134,7 +135,7 @@ public abstract class PlayerMixin {
         //No fire damage when sog
         if (entity instanceof Player player && (source.is(DamageTypes.FIREBALL) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || source.is(DamageTypes.CAMPFIRE))) {
             PlushieData data = player.getData(DataAttachmentRegister.PLUSHIE.get());
-            cir.setReturnValue(data.isPlushie() && data.sogPercentage() >= 0.05f);
+            cir.setReturnValue(data.isPlushie() && data.sogPercentage() >= CommonConfig.SOGGINESS_THRESHOLD.getAsDouble());
         }
     }
 
