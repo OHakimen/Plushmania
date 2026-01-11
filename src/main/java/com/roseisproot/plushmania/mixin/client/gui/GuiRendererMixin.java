@@ -1,4 +1,4 @@
-package com.roseisproot.plushmania.mixin.client;
+package com.roseisproot.plushmania.mixin.client.gui;
 
 import com.roseisproot.plushmania.registry.DataAttachmentRegister;
 import net.minecraft.client.Minecraft;
@@ -18,4 +18,6 @@ public class GuiRendererMixin {
             ci.cancel();
         }
     }
+
+
 }

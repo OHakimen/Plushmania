@@ -11,18 +11,23 @@ public class PlushieData{
     float sogPercentage;
     int color;
 
+    boolean shouldRender;
 
-    public PlushieData(boolean isPlushie, float sogPercentage, int color) {
+
+    public PlushieData(boolean isPlushie, float sogPercentage, int color, boolean shouldRender) {
         this.isPlushie = isPlushie;
         this.sogPercentage = sogPercentage;
         this.color = color;
+        this.shouldRender = shouldRender;
     }
 
     public static Codec<PlushieData> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     Codec.BOOL.fieldOf("isPlushie").forGetter(PlushieData::isPlushie),
                     Codec.FLOAT.fieldOf("sogPercentage").forGetter(PlushieData::sogPercentage),
-                    Codec.INT.fieldOf("color").forGetter(PlushieData::getColor)
+                    Codec.INT.fieldOf("color").forGetter(PlushieData::getColor),
+                    Codec.BOOL.fieldOf("shouldRender").forGetter(PlushieData::shouldRender)
+
             ).apply(instance, PlushieData::new)
     );
 
@@ -33,8 +38,9 @@ public class PlushieData{
             boolean isPlushie = registryFriendlyByteBuf.readBoolean();
             float sogPercentage = registryFriendlyByteBuf.readFloat();
             int color = registryFriendlyByteBuf.readInt();
+            boolean shouldRender = registryFriendlyByteBuf.readBoolean();
 
-            return new PlushieData(isPlushie, sogPercentage, color);
+            return new PlushieData(isPlushie, sogPercentage, color, shouldRender);
         }
 
         @Override
@@ -42,6 +48,7 @@ public class PlushieData{
             o.writeBoolean(plushieData.isPlushie());
             o.writeFloat(plushieData.sogPercentage());
             o.writeInt(plushieData.getColor());
+            o.writeBoolean(plushieData.shouldRender());
         }
     };
 
@@ -69,6 +76,15 @@ public class PlushieData{
 
     public PlushieData setColor(int color) {
         this.color = color;
+        return this;
+    }
+
+    public boolean shouldRender() {
+        return shouldRender;
+    }
+
+    public PlushieData setShouldRender(boolean shouldRender) {
+        this.shouldRender = shouldRender;
         return this;
     }
 }

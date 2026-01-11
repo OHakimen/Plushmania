@@ -6,6 +6,8 @@ import com.mojang.math.Axis;
 import com.roseisproot.plushmania.Plushmania;
 import com.roseisproot.plushmania.client.models.SlimPlushieModel;
 import com.roseisproot.plushmania.config.ClientConfig;
+import com.roseisproot.plushmania.data.PlushieData;
+import com.roseisproot.plushmania.registry.DataAttachmentRegister;
 import com.roseisproot.plushmania.registry.ItemRegister;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
@@ -43,7 +45,11 @@ public class BackItemRenderLayer extends RenderLayer<AbstractClientPlayer, Playe
     @Override
     public void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, AbstractClientPlayer abstractClientPlayer, float v, float v1, float partialTicks, float v3, float v4, float v5) {
 
-        if(ClientConfig.DISABLE_BACK_ITEM_DISPLAY.get()){
+
+        PlushieData data = abstractClientPlayer.getData(DataAttachmentRegister.PLUSHIE.get());
+
+
+        if(ClientConfig.DISABLE_BACK_ITEM_DISPLAY.get() || data.shouldRender()){
             return;
         }
 

@@ -1,4 +1,4 @@
-package com.roseisproot.plushmania.mixin.client;
+package com.roseisproot.plushmania.mixin.client.renderer;
 
 import com.haki.rosarium.common.utils.ColorUtils;
 import com.llamalad7.mixinextras.sugar.Local;

@@ -22,7 +22,7 @@ public class DataAttachmentRegister {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Plushmania.MODID);
 
     public static final Supplier<AttachmentType<PlushieData>> PLUSHIE = ATTACHMENT_TYPES.register(
-            "plushie", () -> AttachmentType.builder(() -> new PlushieData(false,0 , 0xff0052)).serialize(PlushieData.CODEC)
+            "plushie", () -> AttachmentType.builder(() -> new PlushieData(false,0 , 0xff0052, true)).serialize(PlushieData.CODEC)
                     .sync(PlushieData.STREAM_CODEC)
                     .copyOnDeath()
                     .build()

@@ -88,7 +88,7 @@ public class SeamstressNeedleItem extends Item{
 
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return 100;
+        return 20;
     }
 
     @Override

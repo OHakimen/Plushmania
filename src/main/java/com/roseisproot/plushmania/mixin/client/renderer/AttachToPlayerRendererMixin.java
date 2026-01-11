@@ -1,4 +1,4 @@
-package com.roseisproot.plushmania.mixin.client;
+package com.roseisproot.plushmania.mixin.client.renderer;
 
 import com.roseisproot.plushmania.client.renderers.layers.BackItemRenderLayer;
 import com.roseisproot.plushmania.client.renderers.layers.StitchesLayer;

@@ -8,10 +8,11 @@
     "PlayerMixin"
   ],
   "client": [
-    "client.AttachToPlayerRendererMixin",
-    "client.GuiRendererMixin",
-    "client.HumanoidModelMixin",
-    "client.PlayerSkinMixin"
+    "client.gui.GuiRendererMixin",
+    "client.gui.PlayerInventoryScreenMixin",
+    "client.renderer.AttachToPlayerRendererMixin",
+    "client.renderer.HumanoidModelMixin",
+    "client.renderer.PlayerSkinMixin"
   ],
   "injectors": {
     "defaultRequire": 1
